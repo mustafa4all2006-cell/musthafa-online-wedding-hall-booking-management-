@@ -1,0 +1,30 @@
+[
+  {
+    "payment_id": 1,
+    "booking_id": 1,
+    "amount": 150000,
+    "payment_date": "2026-11-01",
+    "payment_status": "Paid"
+  },
+  {
+    "payment_id": 2,
+    "booking_id": 2,
+    "amount": 50000,
+    "payment_date": "2026-11-03",
+    "payment_status": "Partially Paid"
+  },
+  {
+    "payment_id": 3,
+    "booking_id": 3,
+    "amount": 30000,
+    "payment_date": "2026-11-05",
+    "payment_status": "Pending"
+  },
+  {
+    "payment_id": 4,
+    "booking_id": 4,
+    "amount": 65000,
+    "payment_date": "2026-11-06",
+    "payment_status": "Paid"
+  }
+]

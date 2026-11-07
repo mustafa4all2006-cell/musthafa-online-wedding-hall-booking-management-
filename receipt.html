@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Receipt | Musthafa Wedding Venues</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧾</text></svg>">
+</head>
+<body style="background: #f7fafc; padding: 2rem 1rem;">
+
+  <div style="max-width: 750px; margin: 0 auto 1.5rem; display: flex; justify-content: space-between; align-items: center;" class="no-print">
+    <a href="/" class="btn-outline btn-sm">⬅️ Back to Portal</a>
+    <button onclick="window.print()" class="btn-primary btn-sm">🖨️ Print Invoice / Receipt</button>
+  </div>
+
+  <div id="receipt-container">
+    <div style="text-align: center; padding: 3rem;">Loading reservation voucher...</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get('booking_id') || 1;
+
+    async function loadReceipt() {
+      try {
+        const res = await fetch(`/api/bookings/${bookingId}`);
+        const b = await res.json();
+        if (!res.ok) throw new Error(b.error || 'Receipt not found');
+
+        const paymentsList = b.payments || [];
+        const isPaid = Number(b.balance_amount) <= 0;
+
+        document.getElementById('receipt-container').innerHTML = `
+          <div class="receipt-wrapper">
+            <div class="receipt-header">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px;">
+                  Official Reservation Voucher & Invoice
+                </div>
+                <div class="receipt-title">Musthafa Wedding Venues</div>
+                <div style="color: #718096; font-size: 0.85rem;">Online Wedding Hall Booking Management System</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">RECEIPT #${b.booking_id}</div>
+                <div style="font-size: 0.85rem; color: #718096;">Date: ${new Date().toLocaleDateString()}</div>
+                <span class="badge ${isPaid ? 'badge-paid' : 'badge-pending'}" style="margin-top: 0.4rem;">
+                  ${isPaid ? 'Fully Paid' : 'Payment Due'}
+                </span>
+              </div>
+            </div>
+
+            <div class="receipt-info-grid">
+              <div class="receipt-box">
+                <h5>Customer Information</h5>
+                <div style="font-weight: 700; font-size: 1.05rem;">${b.customer_name}</div>
+                <div style="font-size: 0.85rem; color: #718096; margin-top: 4px;">📧 ${b.customer_email}</div>
+                <div style="font-size: 0.85rem; color: #718096;">📞 ${b.customer_phone}</div>
+                <div style="font-size: 0.85rem; color: #718096;">🏠 ${b.customer_address || 'Address on file'}</div>
+              </div>
+              <div class="receipt-box">
+                <h5>Venue & Event Details</h5>
+                <div style="font-weight: 700; font-size: 1.05rem; color: var(--primary);">${b.event_name}</div>
+                <div style="font-size: 0.85rem; color: #718096; margin-top: 4px;">🏛️ <strong>${b.hall_name}</strong></div>
+                <div style="font-size: 0.85rem; color: #718096;">📍 ${b.hall_location} (Guest Capacity: ${Number(b.hall_capacity).toLocaleString()})</div>
+                <div style="font-size: 0.85rem; color: #718096;">📅 <strong>Event Date: ${b.event_date}</strong></div>
+                <div style="font-size: 0.85rem; color: #718096;">⏰ Event Hours: ${b.start_time} - ${b.end_time}</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+              <h5 style="font-size: 0.85rem; text-transform: uppercase; color: #718096; margin-bottom: 0.6rem;">Payment Ledger (Table: payments)</h5>
+              <table class="data-table" style="font-size: 0.85rem;">
+                <thead>
+                  <tr>
+                    <th>Payment ID</th>
+                    <th>Payment Date</th>
+                    <th>Amount Paid</th>
+                    <th>Payment Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${paymentsList.length > 0 ? paymentsList.map(p => `
+                    <tr>
+                      <td>#PAY-${p.payment_id}</td>
+                      <td>${p.payment_date}</td>
+                      <td><strong>₹${Number(p.amount).toLocaleString('en-IN')}</strong></td>
+                      <td><span class="badge ${p.payment_status === 'Paid' ? 'badge-paid' : 'badge-pending'}">${p.payment_status}</span></td>
+                    </tr>
+                  `).join('') : `
+                    <tr><td colspan="4" style="text-align: center; color: #a0aec0;">No payment transactions recorded</td></tr>
+                  `}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pricing-summary-card">
+              <div class="pricing-summary-row">
+                <span>Total Hall Rental:</span>
+                <strong>₹${Number(b.total_amount).toLocaleString('en-IN')}</strong>
+              </div>
+              <div class="pricing-summary-row">
+                <span>Total Amount Paid:</span>
+                <strong style="color: var(--success);">₹${Number(b.total_paid).toLocaleString('en-IN')}</strong>
+              </div>
+              <div class="pricing-summary-row total-row">
+                <span>Outstanding Balance:</span>
+                <span>₹${Number(b.balance_amount).toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; text-align: center; color: #718096; font-size: 0.78rem;">
+              This is a computer-generated confirmation voucher for Musthafa Online Wedding Hall Booking Management System.
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        document.getElementById('receipt-container').innerHTML = `
+          <div style="text-align: center; color: var(--danger); padding: 3rem;">
+            <h3>Error loading voucher</h3>
+            <p>${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    loadReceipt();
+  </script>
+</body>
+</html>

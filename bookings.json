@@ -1,0 +1,46 @@
+[
+  {
+    "booking_id": 1,
+    "customer_id": 1,
+    "hall_id": 1,
+    "event_name": "Musthafa & Sarah Wedding Reception",
+    "event_date": "2026-11-20",
+    "start_time": "18:00:00",
+    "end_time": "23:30:00",
+    "total_amount": 150000,
+    "status": "Confirmed"
+  },
+  {
+    "booking_id": 2,
+    "customer_id": 2,
+    "hall_id": 2,
+    "event_name": "Ayesha & Zayd Nikah & Walima Ceremony",
+    "event_date": "2026-11-25",
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "total_amount": 95000,
+    "status": "Confirmed"
+  },
+  {
+    "booking_id": 3,
+    "customer_id": 3,
+    "hall_id": 3,
+    "event_name": "Rajesh & Pooja Grand Sangeet Night",
+    "event_date": "2026-12-05",
+    "start_time": "17:30:00",
+    "end_time": "23:00:00",
+    "total_amount": 185000,
+    "status": "Pending"
+  },
+  {
+    "booking_id": 4,
+    "customer_id": 4,
+    "hall_id": 4,
+    "event_name": "Sneha & Rohan Engagement Celebration",
+    "event_date": "2026-12-12",
+    "start_time": "10:00:00",
+    "end_time": "15:00:00",
+    "total_amount": 65000,
+    "status": "Confirmed"
+  }
+]

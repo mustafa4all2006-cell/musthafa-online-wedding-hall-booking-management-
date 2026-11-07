@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musthafa - Online Wedding Hall Booking Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">💍</div>
+        <div class="brand-text">
+          <h1>Musthafa Wedding Venues</h1>
+          <span>Online Wedding Hall Booking Management System</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" onclick="scrollToSection('section-halls')">🏰 Browse Halls</button>
+        <button class="nav-btn" onclick="scrollToSection('section-availability')">📅 Check Availability</button>
+        <button class="nav-btn" onclick="openBookingModal()">💍 Book a Hall</button>
+        <button class="nav-btn" onclick="scrollToSection('section-lookup')">🧾 My Bookings & Payments</button>
+        <a href="/admin.html" class="nav-btn nav-admin-badge">⚙️ Admin Portal</a>
+        <div class="db-pill" id="db-status-badge">
+          <span class="db-dot" id="db-status-dot"></span>
+          <span id="db-status-text">Connecting MySQL...</span>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section with Quick Search -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-tagline">✨ Premium Marriage & Banquet Halls</div>
+      <h2>Reserve Your Dream Wedding Hall Online</h2>
+      <p>Discover luxury marriage halls, check live date availability, compare guest capacities & prices, and secure your event reservation seamlessly.</p>
+
+      <div class="hero-quick-search">
+        <div class="hero-input-group">
+          <input type="text" id="search-query" placeholder="🔍 Search by hall name, location, or facility...">
+        </div>
+        <div class="hero-input-group">
+          <select id="filter-location">
+            <option value="">All Cities / Locations</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Delhi">Delhi</option>
+          </select>
+        </div>
+        <div class="hero-input-group">
+          <select id="filter-capacity">
+            <option value="0">Any Guest Capacity</option>
+            <option value="400">400+ Guests</option>
+            <option value="600">600+ Guests</option>
+            <option value="1000">1,000+ Guests</option>
+            <option value="1500">1,500+ Guests</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="filterHalls()">Find Halls</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Statistics Strip -->
+  <main class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon halls">🏛️</div>
+        <div class="stat-data">
+          <h4>Total Venues</h4>
+          <div class="stat-number" id="stat-total-halls">--</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon bookings">✅</div>
+        <div class="stat-data">
+          <h4>Available Now</h4>
+          <div class="stat-number" id="stat-available-halls" style="color: var(--success);">--</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon customers">💍</div>
+        <div class="stat-data">
+          <h4>Confirmed Bookings</h4>
+          <div class="stat-number" id="stat-confirmed-bookings">--</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon revenue">💳</div>
+        <div class="stat-data">
+          <h4>Total Revenue</h4>
+          <div class="stat-number" id="stat-total-revenue" style="color: var(--primary);">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Browse Wedding Halls Catalog -->
+    <section id="section-halls" style="margin-bottom: 3.5rem;">
+      <div class="section-header">
+        <div class="section-title">
+          <h3>Featured Wedding & Marriage Halls</h3>
+          <p>Explore top-rated banquet halls with guest capacity, luxury amenities, and clear booking pricing.</p>
+        </div>
+        <div>
+          <button class="btn-primary" onclick="openBookingModal()">+ Reserve a Hall</button>
+        </div>
+      </div>
+
+      <div class="halls-grid" id="halls-container">
+        <!-- Rendered dynamically via app.js -->
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+          <p>Loading luxury wedding halls...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Real-time Date Availability Checker -->
+    <section id="section-availability" style="margin-bottom: 3.5rem;">
+      <div class="card-box">
+        <div class="section-title" style="margin-bottom: 1.25rem;">
+          <h3>📅 Real-Time Hall Availability Checker</h3>
+          <p>Select your preferred venue and wedding date to check live reservation status before booking.</p>
+        </div>
+
+        <form id="availability-form" class="form-grid">
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="check-hall-select">Select Wedding Hall *</label>
+            <select id="check-hall-select" class="form-control" required>
+              <option value="">-- Choose Hall --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="check-date">Desired Event Date *</label>
+            <input type="date" id="check-date" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn-primary" style="height: 44px; width: 100%; justify-content: center;">
+              Check Date Slot
+            </button>
+          </div>
+        </form>
+
+        <div id="availability-result-box" class="availability-result"></div>
+      </div>
+    </section>
+
+    <!-- Section 3: Customer Booking & Payment Details Lookup -->
+    <section id="section-lookup" style="margin-bottom: 3rem;">
+      <div class="section-header">
+        <div class="section-title">
+          <h3>🧾 Customer Booking & Payment Lookup</h3>
+          <p>Already booked a hall? Search with your phone number, email, or booking ID to view details, track payments, or print your invoice.</p>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div style="display: flex; gap: 0.75rem; max-width: 650px; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <input type="text" id="lookup-query" class="form-control" style="flex: 1; min-width: 250px;" placeholder="Enter Phone number, Email address, or Booking ID...">
+          <button class="btn-primary" onclick="lookupCustomerBookings()">Search Bookings</button>
+        </div>
+
+        <div id="lookup-results">
+          <div style="text-align: center; padding: 2rem; background: #fdfbf7; border-radius: 8px; border: 1px dashed #cbd5e0;">
+            <span style="font-size: 2.2rem;">🔍</span>
+            <p style="color: #718096; margin-top: 0.5rem;">Enter your contact information above to view your confirmed wedding reservations and payment balance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =======================================================
+       Modal: Book a Hall (Direct Reservation)
+       ======================================================= -->
+  <div class="modal-overlay" id="booking-modal">
+    <div class="modal-content" style="max-width: 750px;">
+      <div class="modal-header">
+        <h3>💍 Book Wedding Hall Reservation</h3>
+        <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+      </div>
+
+      <form id="booking-form">
+        <div class="modal-body">
+          <!-- Step 1: Hall Selection -->
+          <div class="wizard-section-title">1. Venue & Event Schedule</div>
+          <div class="form-grid">
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="book-hall-select">Select Wedding Hall *</label>
+              <select id="book-hall-select" class="form-control" required>
+                <option value="">-- Choose Hall --</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="book-event-name">Event Title / Description *</label>
+              <input type="text" id="book-event-name" class="form-control" placeholder="e.g. Musthafa & Sarah Wedding Reception" required>
+            </div>
+
+            <div class="form-group">
+              <label for="book-date">Event Date *</label>
+              <input type="date" id="book-date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label for="book-start-time">Start Time *</label>
+              <input type="time" id="book-start-time" class="form-control" value="09:00" required>
+            </div>
+
+            <div class="form-group">
+              <label for="book-end-time">End Time *</label>
+              <input type="time" id="book-end-time" class="form-control" value="23:00" required>
+            </div>
+          </div>
+
+          <!-- Step 2: Customer Contact Info -->
+          <div class="wizard-section-title">2. Customer Details</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="book-cust-name">Full Name *</label>
+              <input type="text" id="book-cust-name" class="form-control" placeholder="Musthafa" required>
+            </div>
+
+            <div class="form-group">
+              <label for="book-cust-phone">Phone Number *</label>
+              <input type="tel" id="book-cust-phone" class="form-control" placeholder="9876543210" required>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="book-cust-email">Email Address *</label>
+              <input type="email" id="book-cust-email" class="form-control" placeholder="musthafa@example.com" required>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="book-cust-address">Residential Address</label>
+              <input type="text" id="book-cust-address" class="form-control" placeholder="124 Grand Palace Road, Chennai">
+            </div>
+          </div>
+
+          <!-- Step 3: Payment Breakdown -->
+          <div class="wizard-section-title">3. Pricing & Advance Payment</div>
+          <div class="pricing-summary-card">
+            <div class="pricing-summary-row">
+              <span>Standard Hall Rate:</span>
+              <strong id="book-hall-rate">₹0.00</strong>
+            </div>
+            <div class="pricing-summary-row">
+              <span>Suggested 25% Token Advance:</span>
+              <span id="book-advance-suggest" style="color: var(--secondary-hover); font-weight: 600;">₹0.00</span>
+            </div>
+            <div class="pricing-summary-row total-row">
+              <span>Total Booking Amount:</span>
+              <span id="book-total-amount">₹0.00</span>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="book-payment-amount">Payment Amount (₹) *</label>
+              <input type="number" step="0.01" id="book-payment-amount" class="form-control" placeholder="Amount to pay now" required>
+            </div>
+            <div class="form-group">
+              <label for="book-payment-status">Initial Payment Status</label>
+              <select id="book-payment-status" class="form-control">
+                <option value="Paid">Fully Paid</option>
+                <option value="Partially Paid" selected>Advance Paid (Partially Paid)</option>
+                <option value="Pending">Pay Later (Pending)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" onclick="closeBookingModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Confirm & Book Hall</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       Modal: Record Payment for Existing Booking
+       ======================================================= -->
+  <div class="modal-overlay" id="payment-modal">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>💳 Record Payment</h3>
+        <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+      </div>
+
+      <form id="payment-record-form">
+        <input type="hidden" id="pay-booking-id">
+        <div class="modal-body">
+          <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1.25rem;">
+            <div style="font-size: 0.85rem; color: #718096;">Outstanding Balance Due:</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--danger);" id="pay-balance-label">₹0.00</div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="pay-amount">Amount to Pay (₹) *</label>
+            <input type="number" step="0.01" id="pay-amount" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pay-status">Payment Status *</label>
+            <select id="pay-status" class="form-control" required>
+              <option value="Paid">Paid in Full</option>
+              <option value="Partially Paid">Partially Paid</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" onclick="closePaymentModal()">Cancel</button>
+          <button type="submit" class="btn-success">Submit Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       Modal: Printable Invoice & Reservation Receipt
+       ======================================================= -->
+  <div class="modal-overlay" id="receipt-modal">
+    <div class="modal-content" style="max-width: 820px;">
+      <div class="modal-header no-print">
+        <h3>🧾 Reservation Confirmation & Invoice</h3>
+        <div>
+          <button class="btn-outline btn-sm" onclick="printReceipt()" style="margin-right: 0.5rem;">🖨️ Print Receipt</button>
+          <button class="modal-close" onclick="closeReceiptModal()">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" id="receipt-content">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4 style="color: white; margin-bottom: 0.5rem; font-size: 1.1rem;">Musthafa - Online Wedding Hall Booking Management System</h4>
+        <p style="max-width: 480px; font-size: 0.85rem;">A complete web-based venue reservation solution connecting event planners with premier banquet halls, providing real-time availability checks, secure booking, and transparent payment tracking.</p>
+      </div>
+      <div>
+        <h5 style="color: white; margin-bottom: 0.5rem; font-size: 0.9rem;">Technology Stack</h5>
+        <ul style="list-style: none; font-size: 0.85rem; line-height: 1.8;">
+          <li>• Frontend: HTML5, Modern CSS, Vanilla JavaScript</li>
+          <li>• Backend: Express.js (Node.js REST API)</li>
+          <li>• Database: MySQL 8.0 (wedding_hall_db)</li>
+          <li>• Version Control: Git</li>
+        </ul>
+      </div>
+      <div>
+        <h5 style="color: white; margin-bottom: 0.5rem; font-size: 0.9rem;">Quick Links</h5>
+        <ul style="list-style: none; font-size: 0.85rem; line-height: 1.8;">
+          <li><a href="#section-halls" style="color: #cbd5e0;">Browse Halls</a></li>
+          <li><a href="#section-availability" style="color: #cbd5e0;">Availability Checker</a></li>
+          <li><a href="#section-lookup" style="color: #cbd5e0;">Track Bookings</a></li>
+          <li><a href="/admin.html" style="color: #cbd5e0;">Admin Dashboard</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Musthafa. Online Wedding Hall Booking Management System. Developed with Express.js & MySQL.
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script>
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

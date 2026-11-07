@@ -1,0 +1,37 @@
+[
+  {
+    "customer_id": 1,
+    "name": "Mohammed Musthafa",
+    "email": "musthafa@example.com",
+    "phone": "9876543210",
+    "address": "124 Grand Palace Road, Chennai"
+  },
+  {
+    "customer_id": 2,
+    "name": "Ayesha Siddiqua",
+    "email": "ayesha.s@example.com",
+    "phone": "9845123456",
+    "address": "45 Anna Nagar West, Chennai"
+  },
+  {
+    "customer_id": 3,
+    "name": "Rajesh Kumar",
+    "email": "rajesh.kumar@example.com",
+    "phone": "9789012345",
+    "address": "78 Jubilee Hills, Hyderabad"
+  },
+  {
+    "customer_id": 4,
+    "name": "Sneha Patel",
+    "email": "sneha.patel@example.com",
+    "phone": "9900112233",
+    "address": "12 MG Road, Bangalore"
+  },
+  {
+    "customer_id": 5,
+    "name": "Vikram Sharma",
+    "email": "vikram.s@example.com",
+    "phone": "9811223344",
+    "address": "56 South Extension, Delhi"
+  }
+]

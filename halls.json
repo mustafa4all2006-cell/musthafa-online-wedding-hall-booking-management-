@@ -1,0 +1,56 @@
+[
+  {
+    "hall_id": 1,
+    "hall_name": "The Royal Grand Palace Banquet",
+    "location": "T. Nagar, Chennai",
+    "capacity": 1200,
+    "price": 150000,
+    "facilities": "Central AC, Grand Bridal Suite, Valet Parking (300 Cars), Stage Decoration, Audio-Visual LED Walls, Dining Hall (500 capacity), Generator Backup",
+    "status": "Available"
+  },
+  {
+    "hall_id": 2,
+    "hall_name": "Emerald Convention Center",
+    "location": "Whitefield, Bangalore",
+    "capacity": 800,
+    "price": 95000,
+    "facilities": "Centralized AC, Luxury Green Rooms, Dedicated Dining Area, In-house Sound & Lighting, 200 Car Parking, Power Backup",
+    "status": "Available"
+  },
+  {
+    "hall_id": 3,
+    "hall_name": "Kohinoor Pearl Luxury Lawn & Hall",
+    "location": "Banjara Hills, Hyderabad",
+    "capacity": 1500,
+    "price": 185000,
+    "facilities": "Open Lawn + Indoor AC Hall, Chandelier Stage, Royal Bride/Groom Suites, 500 Car Parking, Live Kitchen Stalls, Full Generator Backup",
+    "status": "Available"
+  },
+  {
+    "hall_id": 4,
+    "hall_name": "Grand Sapphire Celebration Hall",
+    "location": "Koramangala, Bangalore",
+    "capacity": 500,
+    "price": 65000,
+    "facilities": "Full AC, Designer Mandap/Stage, Sound System, Buffet Dining Area, 100 Car Parking, Lift Access",
+    "status": "Available"
+  },
+  {
+    "hall_id": 5,
+    "hall_name": "Mayflower Heritage Wedding Hall",
+    "location": "Mylapore, Chennai",
+    "capacity": 650,
+    "price": 75000,
+    "facilities": "Traditional Heritage Architecture, AC Mandapam, Large Dining Hall, Nadaswaram Stage, 120 Car Parking, Backup Generator",
+    "status": "Available"
+  },
+  {
+    "hall_id": 6,
+    "hall_name": "Paradise Crown Banquet",
+    "location": "Velachery, Chennai",
+    "capacity": 400,
+    "price": 48000,
+    "facilities": "Split AC, Modern Stage Lighting, Dining Section, DJ Music Setup, 60 Car Parking, CCTV Surveillance",
+    "status": "Available"
+  }
+]
